@@ -7,422 +7,188 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-
     :root {
-      --blue: #1a56db;
-      --blue-light: #eff4ff;
-      --blue-mid: #c7d9ff;
-      --text: #111827;
-      --muted: #6b7280;
-      --border: #e5e7eb;
-      --white: #ffffff;
+      --blue: #1a56db; --blue-light: #eff4ff; --blue-mid: #c7d9ff;
+      --text: #111827; --muted: #6b7280; --border: #e5e7eb; --white: #ffffff;
     }
+    body { font-family: 'DM Sans', sans-serif; background: var(--white); color: var(--text); min-height: 100vh; }
 
-    body {
-      font-family: 'DM Sans', sans-serif;
-      background: var(--white);
-      color: var(--text);
-      min-height: 100vh;
-    }
-
-    /* NAVBAR */
+    /* NAV */
     nav {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 20px 48px;
-      border-bottom: 1px solid var(--border);
-      position: sticky;
-      top: 0;
-      background: rgba(255,255,255,0.95);
-      backdrop-filter: blur(8px);
-      z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 48px; border-bottom: 1px solid var(--border);
+      position: sticky; top: 0; background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(8px); z-index: 100;
     }
-
-    .nav-links {
-      display: flex;
-      align-items: center;
-      gap: 32px;
-    }
-
-    .nav-links a {
-      font-size: 14px;
-      font-weight: 500;
-      color: var(--muted);
-      text-decoration: none;
-      transition: color 0.15s;
-    }
-
-    .nav-links a:hover { color: var(--text); }
-    .nav-links a.active { color: var(--blue); font-weight: 600; }
-
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      text-decoration: none;
-    }
-
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
     .logo-book {
-      width: 42px;
-      height: 42px;
-      background: var(--blue);
-      color: white;
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: 'Playfair Display', serif;
-      font-size: 22px;
-      font-weight: 700;
+      width: 40px; height: 40px; background: var(--blue); color: white;
+      border-radius: 10px; display: flex; align-items: center; justify-content: center;
+      font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700;
       box-shadow: 0 2px 8px rgba(26,86,219,0.25);
     }
-
-    .logo-text {
-      font-size: 20px;
-      font-weight: 700;
-      color: var(--text);
-      letter-spacing: -0.5px;
-    }
-
+    .logo-text { font-size: 18px; font-weight: 700; color: var(--text); letter-spacing: -0.5px; }
     .logo-text span { color: var(--blue); }
-
-    .nav-right {
-      font-size: 13px;
-      color: var(--muted);
-    }
+    .nav-links { display: flex; align-items: center; gap: 28px; }
+    .nav-links a { font-size: 14px; font-weight: 500; color: var(--muted); text-decoration: none; transition: color 0.15s; }
+    .nav-links a:hover { color: var(--text); }
+    .nav-links a.active { color: var(--blue); font-weight: 600; }
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; }
+    .hamburger span { display: block; width: 22px; height: 2px; background: var(--text); border-radius: 99px; }
+    .mobile-menu { display: none; flex-direction: column; padding: 16px 24px; border-bottom: 1px solid var(--border); gap: 16px; }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a { font-size: 15px; font-weight: 500; color: var(--muted); text-decoration: none; }
+    .mobile-menu a.active { color: var(--blue); font-weight: 600; }
 
     /* HERO */
-    .hero {
-      max-width: 680px;
-      margin: 80px auto 0;
-      padding: 0 24px;
-      text-align: center;
-    }
-
+    .hero { max-width: 680px; margin: 60px auto 0; padding: 0 24px; text-align: center; }
     .hero-badge {
-      display: inline-block;
-      background: var(--blue-light);
-      color: var(--blue);
-      font-size: 12px;
-      font-weight: 600;
-      padding: 5px 14px;
-      border-radius: 99px;
-      margin-bottom: 20px;
+      display: inline-block; background: var(--blue-light); color: var(--blue);
+      font-size: 12px; font-weight: 600; padding: 5px 14px; border-radius: 99px; margin-bottom: 20px;
     }
-
-    .hero h1 {
-      font-size: 38px;
-      font-weight: 600;
-      line-height: 1.2;
-      letter-spacing: -1px;
-      margin-bottom: 12px;
-    }
-
-    .hero p {
-      font-size: 16px;
-      color: var(--muted);
-      margin-bottom: 36px;
-      line-height: 1.6;
-    }
+    .hero h1 { font-size: 36px; font-weight: 600; line-height: 1.2; letter-spacing: -1px; margin-bottom: 12px; }
+    .hero p { font-size: 15px; color: var(--muted); margin-bottom: 32px; line-height: 1.6; }
 
     /* SEARCH */
     .search-bar {
-      display: flex;
-      align-items: center;
-      border: 1.5px solid var(--border);
-      border-radius: 14px;
-      overflow: hidden;
-      background: var(--white);
-      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
-      margin-bottom: 12px;
-      transition: border-color 0.2s;
+      display: flex; align-items: center; border: 1.5px solid var(--border);
+      border-radius: 14px; overflow: hidden; background: var(--white);
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06); margin-bottom: 12px; transition: border-color 0.2s;
     }
-
-    .search-bar:focus-within {
-      border-color: var(--blue);
-      box-shadow: 0 0 0 3px rgba(26,86,219,0.08);
-    }
-
+    .search-bar:focus-within { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(26,86,219,0.08); }
     .search-bar input {
-      flex: 1;
-      border: none;
-      outline: none;
-      padding: 16px 20px;
-      font-size: 15px;
-      font-family: 'DM Sans', sans-serif;
-      background: transparent;
+      flex: 1; border: none; outline: none; padding: 14px 16px;
+      font-size: 15px; font-family: 'DM Sans', sans-serif; background: transparent; min-width: 0;
     }
-
     .search-bar input::placeholder { color: #9ca3af; }
-
     .filter-btn {
-      padding: 12px 16px;
-      background: none;
-      border: none;
-      border-left: 1.5px solid var(--border);
-      cursor: pointer;
-      color: var(--muted);
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 13px;
-      font-family: 'DM Sans', sans-serif;
-      transition: all 0.15s;
-      white-space: nowrap;
+      padding: 10px 14px; background: none; border: none; border-left: 1.5px solid var(--border);
+      cursor: pointer; color: var(--muted); display: flex; align-items: center; gap: 5px;
+      font-size: 13px; font-family: 'DM Sans', sans-serif; transition: all 0.15s; white-space: nowrap;
     }
-
-    .filter-btn:hover, .filter-btn.active {
-      background: var(--blue-light);
-      color: var(--blue);
-    }
-
+    .filter-btn:hover, .filter-btn.active { background: var(--blue-light); color: var(--blue); }
     .search-submit {
-      padding: 10px 20px;
-      margin: 6px;
-      background: var(--blue);
-      color: white;
-      border: none;
-      border-radius: 10px;
-      font-size: 14px;
-      font-weight: 600;
-      cursor: pointer;
-      font-family: 'DM Sans', sans-serif;
-      transition: background 0.15s;
-      white-space: nowrap;
+      padding: 9px 16px; margin: 5px; background: var(--blue); color: white; border: none;
+      border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer;
+      font-family: 'DM Sans', sans-serif; transition: background 0.15s; white-space: nowrap;
     }
-
     .search-submit:hover { background: #1447c0; }
 
     /* FILTERS */
     .filters {
-      display: none;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-bottom: 16px;
-      padding: 16px;
-      background: var(--blue-light);
-      border-radius: 12px;
-      border: 1px solid var(--blue-mid);
-      text-align: left;
+      display: none; gap: 10px; flex-wrap: wrap; margin-bottom: 16px; padding: 14px;
+      background: var(--blue-light); border-radius: 12px; border: 1px solid var(--blue-mid); text-align: left;
     }
-
     .filters.visible { display: flex; }
-
-    .filters-label {
-      font-size: 12px;
-      color: var(--blue);
-      font-weight: 600;
-      width: 100%;
-      margin-bottom: 4px;
-    }
-
+    .filters-label { font-size: 12px; color: var(--blue); font-weight: 600; width: 100%; margin-bottom: 2px; }
     .filters select {
-      padding: 8px 14px;
-      border: 1.5px solid var(--blue-mid);
-      border-radius: 8px;
-      font-size: 13px;
-      font-family: 'DM Sans', sans-serif;
-      background: white;
-      color: var(--text);
-      cursor: pointer;
-      outline: none;
+      padding: 8px 12px; border: 1.5px solid var(--blue-mid); border-radius: 8px;
+      font-size: 13px; font-family: 'DM Sans', sans-serif; background: white;
+      color: var(--text); cursor: pointer; outline: none; flex: 1; min-width: 100px;
     }
-
     .filters select:focus { border-color: var(--blue); }
 
-    /* OR DIVIDER */
+    /* DIVIDER */
     .or-divider {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin: 20px 0;
-      color: var(--muted);
-      font-size: 13px;
-      transition: opacity 0.3s;
+      display: flex; align-items: center; gap: 12px; margin: 20px 0; color: var(--muted); font-size: 13px;
     }
-    .or-divider::before, .or-divider::after {
-      content: '';
-      flex: 1;
-      height: 1px;
-      background: var(--border);
-    }
+    .or-divider::before, .or-divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
     .or-divider.hidden { display: none; }
 
     /* RESULTS */
-    #results {
-      display: none;
-      text-align: left;
-      margin-top: 8px;
-    }
-
+    #results { display: none; text-align: left; margin-top: 8px; }
     #results.visible { display: block; }
-
-    .results-count {
-      font-size: 12px;
-      color: var(--muted);
-      margin-bottom: 10px;
-      padding-left: 4px;
-    }
-
+    .results-count { font-size: 12px; color: var(--muted); margin-bottom: 10px; padding-left: 4px; }
     .result-item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 14px 16px;
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      margin-bottom: 8px;
-      cursor: pointer;
-      text-decoration: none;
-      color: var(--text);
-      transition: border-color 0.15s, background 0.15s;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 16px; border: 1px solid var(--border); border-radius: 10px; margin-bottom: 8px;
+      cursor: pointer; text-decoration: none; color: var(--text); transition: border-color 0.15s, background 0.15s;
     }
-
-    .result-item:hover {
-      border-color: var(--blue);
-      background: var(--blue-light);
-    }
-
-    .result-left { flex: 1; }
-
-    .result-title {
-      font-size: 14px;
-      font-weight: 600;
-      margin-bottom: 4px;
-    }
-
-    .result-meta {
-      font-size: 12px;
-      color: var(--muted);
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    .result-meta span {
-      display: flex;
-      align-items: center;
-      gap: 3px;
-    }
-
-    .type-badge {
-      font-size: 10px;
-      font-weight: 700;
-      padding: 2px 8px;
-      border-radius: 99px;
-      letter-spacing: 0.5px;
-    }
-
+    .result-item:hover { border-color: var(--blue); background: var(--blue-light); }
+    .result-left { flex: 1; min-width: 0; }
+    .result-title { font-size: 14px; font-weight: 600; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .result-meta { font-size: 12px; color: var(--muted); display: flex; gap: 8px; flex-wrap: wrap; }
+    .type-badge { font-size: 10px; font-weight: 700; padding: 3px 9px; border-radius: 99px; letter-spacing: 0.5px; flex-shrink: 0; margin-left: 8px; }
     .type-COURS { background: #1a56db; color: white; }
     .type-TDS   { background: #eab308; color: white; }
     .type-TPS   { background: #f97316; color: white; }
     .type-EXAMS { background: #dc2626; color: white; }
+    .result-arrow { color: var(--muted); font-size: 16px; margin-left: 8px; flex-shrink: 0; }
+    .no-results { text-align: center; padding: 32px; color: var(--muted); font-size: 14px; }
 
-    .result-arrow {
-      color: var(--muted);
-      font-size: 16px;
-      margin-left: 12px;
-    }
-
-    .no-results {
-      text-align: center;
-      padding: 32px;
-      color: var(--muted);
-      font-size: 14px;
-    }
-
-    /* BROWSE CARD */
-    .browse-section {
-      max-width: 680px;
-      margin: 0 auto 80px;
-      padding: 0 24px;
-      transition: opacity 0.3s;
-    }
-
+    /* BROWSE */
+    .browse-section { max-width: 680px; margin: 0 auto 80px; padding: 0 24px; }
     .browse-section.hidden { display: none; }
-
     .browse-card {
-      position: relative;
-      border-radius: 16px;
-      overflow: hidden;
-      cursor: pointer;
-      text-decoration: none;
-      display: block;
-      height: 200px;
-      border: 1.5px solid var(--border);
+      position: relative; border-radius: 16px; overflow: hidden; cursor: pointer;
+      text-decoration: none; display: block; height: 180px; border: 1.5px solid var(--border);
       transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
     }
-
-    .browse-card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgba(26,86,219,0.12);
-      border-color: var(--blue);
-    }
-
+    .browse-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(26,86,219,0.12); border-color: var(--blue); }
     .browse-bg {
-      position: absolute;
-      inset: 0;
-      background:
-        linear-gradient(135deg, rgba(26,86,219,0.88), rgba(26,86,219,0.6)),
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(26,86,219,0.88), rgba(26,86,219,0.6)),
         url('https://images.unsplash.com/photo-1507842217343-583bb7270b66?w=800&q=80') center/cover;
     }
-
-    .browse-content {
-      position: relative;
-      z-index: 1;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      padding: 32px;
-    }
-
-    .browse-icon { font-size: 28px; margin-bottom: 10px; }
-
-    .browse-title {
-      font-size: 22px;
-      font-weight: 700;
-      color: white;
-      margin-bottom: 6px;
-      letter-spacing: -0.5px;
-    }
-
-    .browse-sub { font-size: 14px; color: rgba(255,255,255,0.75); }
-
+    .browse-content { position: relative; z-index: 1; height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 28px; }
+    .browse-icon { font-size: 26px; margin-bottom: 8px; }
+    .browse-title { font-size: 20px; font-weight: 700; color: white; margin-bottom: 4px; letter-spacing: -0.5px; }
+    .browse-sub { font-size: 13px; color: rgba(255,255,255,0.75); }
     .browse-arrow {
-      position: absolute;
-      right: 28px;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 40px;
-      height: 40px;
-      background: rgba(255,255,255,0.15);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-size: 18px;
-      transition: background 0.2s;
+      position: absolute; right: 24px; top: 50%; transform: translateY(-50%);
+      width: 36px; height: 36px; background: rgba(255,255,255,0.15); border-radius: 50%;
+      display: flex; align-items: center; justify-content: center; color: white; font-size: 16px; transition: background 0.2s;
     }
-
     .browse-card:hover .browse-arrow { background: rgba(255,255,255,0.28); }
 
-    /* LOADING */
-    .loading {
-      text-align: center;
-      padding: 32px;
-      color: var(--muted);
-      font-size: 14px;
+    /* FLOATING FILTER */
+    .float-filter-btn {
+      position: fixed; left: 0; top: 50%; transform: translateY(-50%);
+      background: var(--blue); color: white; border: none; border-radius: 0 10px 10px 0;
+      padding: 14px 10px; cursor: pointer; font-size: 18px; z-index: 200;
+      box-shadow: 2px 0 12px rgba(26,86,219,0.25); display: none; flex-direction: column;
+      align-items: center; gap: 4px; transition: background 0.15s;
     }
+    .float-filter-btn:hover { background: #1447c0; }
+    .float-filter-btn.visible { display: flex; }
+    .float-filter-btn span { font-size: 9px; font-weight: 700; letter-spacing: 1px; writing-mode: vertical-rl; }
 
-    footer {
-      text-align: center;
-      padding: 24px;
-      font-size: 12px;
-      color: #d1d5db;
-      border-top: 1px solid var(--border);
+    /* SIDE PANEL */
+    .filter-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.3); z-index: 300; }
+    .filter-overlay.open { display: block; }
+    .filter-panel {
+      position: fixed; left: -300px; top: 0; bottom: 0; width: 280px;
+      background: white; z-index: 400; padding: 32px 24px;
+      box-shadow: 4px 0 24px rgba(0,0,0,0.12); transition: left 0.3s cubic-bezier(.4,0,.2,1); overflow-y: auto;
+    }
+    .filter-panel.open { left: 0; }
+    .filter-panel-title { font-size: 16px; font-weight: 700; margin-bottom: 24px; display: flex; align-items: center; justify-content: space-between; }
+    .filter-panel-close { cursor: pointer; color: var(--muted); font-size: 20px; background: none; border: none; }
+    .filter-panel-group { margin-bottom: 20px; }
+    .filter-panel-label { font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+    .filter-panel select { width: 100%; padding: 10px 14px; border: 1.5px solid var(--border); border-radius: 10px; font-size: 14px; font-family: 'DM Sans', sans-serif; color: var(--text); background: white; outline: none; cursor: pointer; }
+    .filter-panel select:focus { border-color: var(--blue); }
+    .filter-panel-apply { width: 100%; padding: 12px; background: var(--blue); color: white; border: none; border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: 'DM Sans', sans-serif; margin-top: 8px; transition: background 0.15s; }
+    .filter-panel-apply:hover { background: #1447c0; }
+
+    footer { text-align: center; padding: 24px; font-size: 12px; color: #d1d5db; border-top: 1px solid var(--border); }
+
+    /* MOBILE */
+    @media (max-width: 640px) {
+      nav { padding: 14px 20px; }
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      .hero { margin-top: 36px; }
+      .hero h1 { font-size: 26px; }
+      .hero p { font-size: 14px; }
+      .search-bar input { padding: 12px 12px; font-size: 14px; }
+      .filter-btn { padding: 10px 10px; font-size: 12px; }
+      .search-submit { padding: 8px 12px; font-size: 13px; }
+      .filters select { min-width: 80px; font-size: 12px; }
+      .browse-section { padding: 0 16px; }
+      .browse-card { height: 160px; }
+      .browse-title { font-size: 18px; }
+      .result-item { padding: 12px 12px; }
     }
   </style>
 </head>
@@ -438,21 +204,28 @@
       <a href="browse.html">Parcourir</a>
       <a href="contact.html">Contact</a>
     </div>
+    <div class="hamburger" onclick="toggleMobileMenu()">
+      <span></span><span></span><span></span>
+    </div>
   </nav>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="index.html" class="active">Accueil</a>
+    <a href="browse.html">Parcourir</a>
+    <a href="contact.html">Contact</a>
+  </div>
 
   <div class="hero">
     <div class="hero-badge">📚 Ressources étudiantes FSDM</div>
     <h1>Trouve tes cours,<br>examens et exercices</h1>
     <p>Accède à tous les documents pédagogiques<br>de la Faculté des Sciences Dhar El Mahraz.</p>
 
-    <!-- SEARCH BAR -->
     <div class="search-bar">
       <input type="text" id="searchInput" placeholder="Rechercher un cours, module, professeur..." oninput="onSearch()">
       <button class="filter-btn" id="filterBtn" onclick="toggleFilters()">⚙️ Filtres</button>
       <button class="search-submit" onclick="onSearch()">Rechercher</button>
     </div>
 
-    <!-- FILTERS -->
     <div class="filters" id="filters">
       <div class="filters-label">Affiner la recherche :</div>
       <select id="fSemester" onchange="onSearch()">
@@ -460,22 +233,14 @@
         <option>S1</option><option>S2</option><option>S3</option>
         <option>S4</option><option>S5</option><option>S6</option>
       </select>
-      <select id="fFiliere" onchange="onSearch()">
-        <option value="">Filière</option>
-      </select>
-      <select id="fType" onchange="onSearch()">
-        <option value="">Type</option>
-      </select>
+      <select id="fFiliere" onchange="onSearch()"><option value="">Filière</option></select>
+      <select id="fType" onchange="onSearch()"><option value="">Type</option></select>
     </div>
 
-    <!-- RESULTS -->
     <div id="results"></div>
-
-    <!-- OR DIVIDER -->
     <div class="or-divider" id="orDivider">ou</div>
   </div>
 
-  <!-- BROWSE CARD -->
   <div class="browse-section" id="browseSection">
     <a href="browse.html" class="browse-card">
       <div class="browse-bg"></div>
@@ -488,146 +253,142 @@
     </a>
   </div>
 
+  <button class="float-filter-btn" id="floatFilterBtn" onclick="openSidePanel()">
+    ⚙️<span>FILTRES</span>
+  </button>
+
+  <div class="filter-overlay" id="filterOverlay" onclick="closeSidePanel()"></div>
+  <div class="filter-panel" id="filterPanel">
+    <div class="filter-panel-title">
+      Filtres
+      <button class="filter-panel-close" onclick="closeSidePanel()">✕</button>
+    </div>
+    <div class="filter-panel-group">
+      <div class="filter-panel-label">Semestre</div>
+      <select id="pSemester">
+        <option value="">Tous</option>
+        <option>S1</option><option>S2</option><option>S3</option>
+        <option>S4</option><option>S5</option><option>S6</option>
+      </select>
+    </div>
+    <div class="filter-panel-group">
+      <div class="filter-panel-label">Filière</div>
+      <select id="pFiliere"><option value="">Toutes</option></select>
+    </div>
+    <div class="filter-panel-group">
+      <div class="filter-panel-label">Type</div>
+      <select id="pType">
+        <option value="">Tous</option>
+        <option value="COURS">Cours</option>
+        <option value="TDS">TDs</option>
+        <option value="TPS">TPs</option>
+        <option value="EXAMS">Exams</option>
+      </select>
+    </div>
+    <button class="filter-panel-apply" onclick="applyPanelFilters()">Appliquer</button>
+  </div>
+
   <footer>Qrayti.ma · FSDM · USMBA Fès · 2025</footer>
 
   <script>
     const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQFHAdlDqti75ZJ4JiRFOywjFwZo7Gduwp1tdHKYHNEMGZSk56WTQCOx1eTViMSIxon04Kb97hAWouA/pub?gid=0&single=true&output=csv";
+    let allData = [], dataLoaded = false;
 
-    let allData = [];
-    let dataLoaded = false;
+    fetch(CSV_URL).then(r => r.text()).then(csv => {
+      allData = csv.trim().split("\n").slice(1).map(line => {
+        const c = line.split(",");
+        return { filiere:(c[1]||"").trim(), semester:(c[2]||"").trim(), module:(c[3]||"").trim(), professor:(c[4]||"").trim(), type:(c[5]||"").trim(), title:(c[6]||"").trim(), driveId:(c[7]||"").trim() };
+      }).filter(r => r.driveId);
+      dataLoaded = true;
+      populateFilters();
+    });
 
-    // Load CSV on page load
-    fetch(CSV_URL)
-      .then(r => r.text())
-      .then(csv => {
-        const lines = csv.trim().split("\n").slice(1); // skip header
-        allData = lines.map(line => {
-          const cols = line.split(",");
-          return {
-            department : (cols[0] || "").trim(),
-            filiere    : (cols[1] || "").trim(),
-            semester   : (cols[2] || "").trim(),
-            module     : (cols[3] || "").trim(),
-            professor  : (cols[4] || "").trim(),
-            type       : (cols[5] || "").trim(),
-            title      : (cols[6] || "").trim(),
-            driveId    : (cols[7] || "").trim(),
-          };
-        }).filter(r => r.driveId);
-        dataLoaded = true;
-        populateFilters();
-      })
-      .catch(() => { dataLoaded = false; });
+    function normalizeType(raw) {
+      const t = raw.trim().toUpperCase();
+      if (["COURS","LESSON","LESSONS"].includes(t)) return "COURS";
+      if (["TDS","TD","EXERCISE","EXERCISES"].includes(t)) return "TDS";
+      if (["TPS","TP"].includes(t)) return "TPS";
+      if (["EXAMS","EXAM"].includes(t)) return "EXAMS";
+      return t;
+    }
+
+    function typeLabel(t) { return {COURS:"Cours",TDS:"TDs",TPS:"TPs",EXAMS:"Exams"}[t]||t; }
 
     function populateFilters() {
       const filieres = [...new Set(allData.map(r => r.filiere))].sort();
-      const types    = [...new Set(allData.map(r => r.type.trim()))].sort();
-
-      const fFiliere = document.getElementById('fFiliere');
-      filieres.forEach(f => {
-        const opt = document.createElement('option');
-        opt.value = f; opt.textContent = f;
-        fFiliere.appendChild(opt);
+      ["fFiliere","pFiliere"].forEach(id => {
+        filieres.forEach(f => { const o = document.createElement('option'); o.value=f; o.textContent=f; document.getElementById(id).appendChild(o); });
       });
-
-      const fType = document.getElementById('fType');
-      [["COURS","Cours"],["TDS","TDs"],["TPS","TPs"],["EXAMS","Exams"]].forEach(([val, label]) => {
-        const opt = document.createElement('option');
-        opt.value = val; opt.textContent = label;
-        fType.appendChild(opt);
+      [["COURS","Cours"],["TDS","TDs"],["TPS","TPs"],["EXAMS","Exams"]].forEach(([v,l]) => {
+        const o = document.createElement('option'); o.value=v; o.textContent=l; document.getElementById('fType').appendChild(o);
       });
     }
 
-    function toggleFilters() {
-      document.getElementById('filters').classList.toggle('visible');
-      document.getElementById('filterBtn').classList.toggle('active');
+    function toggleMobileMenu() { document.getElementById('mobileMenu').classList.toggle('open'); }
+    function toggleFilters() { document.getElementById('filters').classList.toggle('visible'); document.getElementById('filterBtn').classList.toggle('active'); }
+    function openSidePanel() { document.getElementById('filterPanel').classList.add('open'); document.getElementById('filterOverlay').classList.add('open'); }
+    function closeSidePanel() { document.getElementById('filterPanel').classList.remove('open'); document.getElementById('filterOverlay').classList.remove('open'); }
+
+    function applyPanelFilters() {
+      document.getElementById('fSemester').value = document.getElementById('pSemester').value;
+      document.getElementById('fFiliere').value  = document.getElementById('pFiliere').value;
+      document.getElementById('fType').value     = document.getElementById('pType').value;
+      closeSidePanel(); onSearch();
     }
+
+    window.addEventListener('scroll', () => {
+      const isSearching = document.getElementById('results').classList.contains('visible');
+      document.getElementById('floatFilterBtn').classList.toggle('visible', isSearching && window.scrollY > 120);
+    });
 
     function onSearch() {
       if (!dataLoaded) return;
-
       const query    = document.getElementById('searchInput').value.trim().toLowerCase();
       const semester = document.getElementById('fSemester').value;
       const filiere  = document.getElementById('fFiliere').value;
       const type     = document.getElementById('fType').value;
-
       const isActive = query || semester || filiere || type;
 
-      const resultsDiv   = document.getElementById('results');
-      const orDivider    = document.getElementById('orDivider');
-      const browseSection = document.getElementById('browseSection');
+      const resultsDiv = document.getElementById('results');
+      const orDivider  = document.getElementById('orDivider');
+      const browse     = document.getElementById('browseSection');
 
       if (!isActive) {
-        // Nothing typed — reset
-        resultsDiv.innerHTML = '';
-        resultsDiv.classList.remove('visible');
-        orDivider.classList.remove('hidden');
-        browseSection.classList.remove('hidden');
+        resultsDiv.innerHTML = ''; resultsDiv.classList.remove('visible');
+        orDivider.classList.remove('hidden'); browse.classList.remove('hidden');
+        document.getElementById('floatFilterBtn').classList.remove('visible');
         return;
       }
 
-      // Hide browse card
-      orDivider.classList.add('hidden');
-      browseSection.classList.add('hidden');
-      resultsDiv.classList.add('visible');
+      orDivider.classList.add('hidden'); browse.classList.add('hidden'); resultsDiv.classList.add('visible');
 
-      // Filter
-      let filtered = allData.filter(r => {
-        const matchQuery = !query || [r.title, r.module, r.professor, r.filiere, r.semester, r.type]
-          .some(v => v.toLowerCase().includes(query));
-        const matchSemester = !semester || r.semester === semester;
-        const matchFiliere  = !filiere  || r.filiere  === filiere;
-        const matchType = !type || (function() {
-          const raw = r.type.trim().toUpperCase();
-          if (type === "COURS") return ["COURS","LESSON","LESSONS"].includes(raw);
-          if (type === "TDS")   return ["TDS","TD","EXERCISE","EXERCISES"].includes(raw);
-          if (type === "TPS")   return ["TPS","TP"].includes(raw);
-          if (type === "EXAMS") return ["EXAMS","EXAM"].includes(raw);
-          return false;
-        })();
-        return matchQuery && matchSemester && matchFiliere && matchType;
+      const filtered = allData.filter(r => {
+        const norm = normalizeType(r.type);
+        const mQ = !query || [r.title,r.module,r.professor,r.filiere,r.semester,r.type].some(v => v.toLowerCase().includes(query));
+        const mS = !semester || r.semester === semester;
+        const mF = !filiere  || r.filiere  === filiere;
+        const mT = !type     || norm === type;
+        return mQ && mS && mF && mT;
       });
 
-      if (filtered.length === 0) {
-        resultsDiv.innerHTML = '<div class="no-results">😕 Aucun résultat trouvé</div>';
-        return;
-      }
+      if (!filtered.length) { resultsDiv.innerHTML = '<div class="no-results">😕 Aucun résultat trouvé</div>'; return; }
 
-      let html = `<div class="results-count">${filtered.length} résultat${filtered.length > 1 ? 's' : ''} trouvé${filtered.length > 1 ? 's' : ''}</div>`;
-
+      let html = `<div class="results-count">${filtered.length} résultat${filtered.length>1?'s':''} trouvé${filtered.length>1?'s':''}</div>`;
       filtered.forEach(r => {
-        const link = "https://drive.google.com/file/d/" + r.driveId + "/preview";
-        const rawType = r.type.trim().toUpperCase();
-          let normalizedType = rawType;
-          if (["COURS", "LESSON", "LESSONS"].includes(rawType)) normalizedType = "COURS";
-          if (["TDS", "TD", "EXERCISE", "EXERCISES"].includes(rawType)) normalizedType = "TDS";
-          if (["TPS", "TP"].includes(rawType)) normalizedType = "TPS";
-          if (["EXAMS", "EXAM"].includes(rawType)) normalizedType = "EXAMS";
-          const typeClass = "type-" + normalizedType;
-        html += `
-          <a class="result-item" href="${link}" target="_blank">
-            <div class="result-left">
-              <div class="result-title">${r.title}</div>
-              <div class="result-meta">
-                <span>📁 ${r.module}</span>
-                <span>👤 ${r.professor}</span>
-                <span>📅 ${r.semester} · ${r.filiere}</span>
-              </div>
-            </div>
-            <span class="type-badge ${typeClass}">${normalizedType === "COURS" ? "Cours" : normalizedType === "TDS" ? "TDs" : normalizedType === "TPS" ? "TPs" : "Exams"}</span>
-            <span class="result-arrow">→</span>
-          </a>
-        `;
+        const norm = normalizeType(r.type);
+        html += `<a class="result-item" href="https://drive.google.com/file/d/${r.driveId}/preview" target="_blank">
+          <div class="result-left">
+            <div class="result-title">${r.title}</div>
+            <div class="result-meta"><span>📁 ${r.module}</span><span>👤 ${r.professor}</span><span>📅 ${r.semester} · ${r.filiere}</span></div>
+          </div>
+          <span class="type-badge type-${norm}">${typeLabel(norm)}</span>
+          <span class="result-arrow">→</span>
+        </a>`;
       });
-
       resultsDiv.innerHTML = html;
     }
 
-    // Search on Enter key
-    document.getElementById('searchInput').addEventListener('keydown', function(e) {
-      if (e.key === 'Enter') onSearch();
-    });
+    document.getElementById('searchInput').addEventListener('keydown', e => { if (e.key==='Enter') onSearch(); });
   </script>
-
 </body>
 </html>
