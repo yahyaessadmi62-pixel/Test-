@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>FSDM Test</title>
+</head>
+<body>
+
+  <h1>FSDM Test</h1>
+  <p id="status">Chargement en cours...</p>
+  <ul id="list"></ul>
+
+  <script>
+    const SHEET_ID = "1wL30Zd5g247nhLxZ8cWsOVr4wXlLbE5qCrqIbX8Ov2Y";
+    const URL = "https://docs.google.com/spreadsheets/d/" + SHEET_ID + "/gviz/tq?tqx=out:json";
+
+    document.getElementById("status").textContent = "Fetching: " + URL;
+
+    fetch(URL)
+      .then(function(res) {
+        document.getElementById("status").textContent = "Response status: " + res.status;
+        return res.text();
+      })
+      .then(function(text) {
+        document.getElementById("status").textContent = "Raw response received, parsing...";
+
+        var clean = text.substring(47).slice(0, -2);
+        var json = JSON.parse(clean);
+        var rows = json.table.rows;
+
+        if (!rows || rows.length === 0) {
+          document.getElementById("status").textContent = "Sheet is empty or no rows found.";
+          return;
+        }
+
+        document.getElementById("status").textContent = rows.length + " fichiers trouves :";
+
+        var list = document.getElementById("list");
+
+        rows.forEach(function(row) {
+          var cols = row.c;
+          var semester  = cols[2] ? cols[2].v : "?";
+          var filiere   = cols[1] ? cols[1].v : "?";
+          var module    = cols[3] ? cols[3].v : "?";
+          var type      = cols[5] ? cols[5].v : "?";
+          var title     = cols[6] ? cols[6].v : "?";
+          var professor = cols[4] ? cols[4].v : "?";
+          var driveId   = cols[7] ? cols[7].v : "";
+
+          var link = "https://drive.google.com/file/d/" + driveId + "/preview";
+
+          var li = document.createElement("li");
+          li.innerHTML = "<a href='" + link + "' target='_blank'>[" + semester + "] " + filiere + " — " + module + " — " + type + " — " + title + " (" + professor + ")</a>";
+          list.appendChild(li);
+        });
+      })
+      .catch(function(err) {
+        document.getElementById("status").textContent = "ERREUR: " + err.message;
+      });
+  </script>
+
+</body>
+</html>
