@@ -548,7 +548,7 @@
 
       filtered.forEach(r => {
         const link = "https://drive.google.com/file/d/" + r.driveId + "/preview";
-        const typeClass = "type-" + r.type;
+        const typeClass = "type-" + r.type.trim().ToUpperCase
         html += `
           <a class="result-item" href="${link}" target="_blank">
             <div class="result-left">
