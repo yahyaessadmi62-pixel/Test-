@@ -292,9 +292,9 @@
       letter-spacing: 0.5px;
     }
 
-    .type-LESSON  { background: #dcfce7; color: #166534; }
-    .type-EXAM    { background: #fee2e2; color: #991b1b; }
-    .type-EXERCISE { background: #fef3c7; color: #92400e; }
+    .type-LESSON   { background: #16a34a; color: white; }
+    .type-EXAM     { background: #dc2626; color: white; }
+    .type-EXERCISE { background: #d97706; color: white; }
 
     .result-arrow {
       color: var(--muted);
@@ -435,14 +435,9 @@
       </select>
       <select id="fFiliere" onchange="onSearch()">
         <option value="">Filière</option>
-        <option>BG</option><option>MI</option><option>PC</option><option>IA</option>
-        <option>BG-Biologie</option><option>BG-Geologie</option>
-        <option>MI-Informatique</option><option>MI-Mathematique</option>
-        <option>PC-Chimie</option><option>PC-Physique</option>
       </select>
       <select id="fType" onchange="onSearch()">
         <option value="">Type</option>
-        <option>LESSON</option><option>EXAM</option><option>EXERCISE</option>
       </select>
     </div>
 
@@ -493,8 +488,28 @@
           };
         }).filter(r => r.driveId);
         dataLoaded = true;
+        populateFilters();
       })
       .catch(() => { dataLoaded = false; });
+
+    function populateFilters() {
+      const filieres = [...new Set(allData.map(r => r.filiere))].sort();
+      const types    = [...new Set(allData.map(r => r.type.trim()))].sort();
+
+      const fFiliere = document.getElementById('fFiliere');
+      filieres.forEach(f => {
+        const opt = document.createElement('option');
+        opt.value = f; opt.textContent = f;
+        fFiliere.appendChild(opt);
+      });
+
+      const fType = document.getElementById('fType');
+      types.forEach(t => {
+        const opt = document.createElement('option');
+        opt.value = t; opt.textContent = t;
+        fType.appendChild(opt);
+      });
+    }
 
     function toggleFilters() {
       document.getElementById('filters').classList.toggle('visible');
@@ -548,7 +563,7 @@
 
       filtered.forEach(r => {
         const link = "https://drive.google.com/file/d/" + r.driveId + "/preview";
-        const typeClass = "type-" + r.type.trim().ToUpperCase
+        const typeClass = "type-" + r.type.trim().toUpperCase().replace(/\s/g, '');
         html += `
           <a class="result-item" href="${link}" target="_blank">
             <div class="result-left">
@@ -559,7 +574,7 @@
                 <span>📅 ${r.semester} · ${r.filiere}</span>
               </div>
             </div>
-            <span class="type-badge ${typeClass}">${r.type}</span>
+            <span class="type-badge ${typeClass}">${r.type.trim()}</span>
             <span class="result-arrow">→</span>
           </a>
         `;
