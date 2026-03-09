@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>FSDM Test</title>
+</head>
+<body>
+
+  <h1>FSDM Test</h1>
+  <p id="status">Chargement...</p>
+  <ul id="list"></ul>
+
+  <script>
+    const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQFHAdlDqti75ZJ4JiRFOywjFwZo7Gduwp1tdHKYHNEMGZSk56WTQCOx1eTViMSIxon04Kb97hAWouA/pub?gid=0&single=true&output=csv";
+
+    fetch(CSV_URL)
+      .then(function(res) { return res.text(); })
+      .then(function(csv) {
+        const lines = csv.trim().split("\n");
+        
+        // Skip header row
+        const rows = lines.slice(1);
+
+        if (rows.length === 0) {
+          document.getElementById("status").textContent = "Aucun fichier trouvé.";
+          return;
+        }
+
+        document.getElementById("status").textContent = rows.length + " fichiers trouvés :";
+
+        const list = document.getElementById("list");
+
+        rows.forEach(function(line) {
+          const cols = line.split(",");
+          const department = cols[0] || "";
+          const filiere    = cols[1] || "";
+          const semester   = cols[2] || "";
+          const module     = cols[3] || "";
+          const professor  = cols[4] || "";
+          const type       = cols[5] || "";
+          const title      = cols[6] || "";
+          const driveId    = cols[7] ? cols[7].trim() : "";
+
+          const link = "https://drive.google.com/file/d/" + driveId + "/preview";
+
+          const li = document.createElement("li");
+          li.innerHTML = "<a href='" + link + "' target='_blank'>[" + semester + "] " + filiere + " — " + module + " — " + type + " — " + title + " (" + professor + ")</a>";
+          list.appendChild(li);
+        });
+      })
+      .catch(function(err) {
+        document.getElementById("status").textContent = "ERREUR: " + err.message;
+      });
+  </script>
+
+</body>
+</html>
