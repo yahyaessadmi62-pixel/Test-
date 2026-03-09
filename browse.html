@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Qrayti.ma — Parcourir</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --blue: #1a56db;
+      --blue-light: #eff4ff;
+      --blue-mid: #c7d9ff;
+      --text: #111827;
+      --muted: #6b7280;
+      --border: #e5e7eb;
+      --white: #ffffff;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: linear-gradient(135deg, #f0f4ff 0%, #fafafa 50%, #f5f0ff 100%);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* NAVBAR */
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 48px;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(8px);
+      z-index: 100;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+    }
+
+    .nav-links a {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+
+    .nav-links a:hover { color: var(--text); }
+    .nav-links a.active { color: var(--blue); font-weight: 600; }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .logo-book {
+      width: 42px;
+      height: 42px;
+      background: var(--blue);
+      color: white;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      font-weight: 700;
+      box-shadow: 0 2px 8px rgba(26,86,219,0.25);
+    }
+
+    .logo-text {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.5px;
+    }
+
+    .logo-text span { color: var(--blue); }
+
+    /* BREADCRUMB */
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 16px 48px;
+      font-size: 13px;
+      color: var(--muted);
+      border-bottom: 1px solid var(--border);
+      flex-wrap: wrap;
+    }
+
+    .breadcrumb-item {
+      cursor: pointer;
+      color: var(--blue);
+      font-weight: 500;
+    }
+
+    .breadcrumb-item:hover { text-decoration: underline; }
+    .breadcrumb-sep { color: var(--border); }
+    .breadcrumb-current { color: var(--text); font-weight: 600; }
+
+    /* MAIN */
+    .main {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 40px 24px 80px;
+    }
+
+    .level-title {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 24px;
+    }
+
+    /* CARDS GRID */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 14px;
+    }
+
+    .card {
+      border: 1.5px solid rgba(255,255,255,0.6);
+      border-radius: 16px;
+      padding: 24px 16px;
+      cursor: pointer;
+      text-align: center;
+      background: rgba(255,255,255,0.55);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      box-shadow: 0 4px 24px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+      transition: transform 0.2s cubic-bezier(.34,1.56,.64,1), box-shadow 0.2s, border-color 0.2s, background 0.2s;
+      opacity: 0;
+      transform: translateY(40px) scale(0.95);
+      animation: dropIn 0.5s cubic-bezier(.34,1.56,.64,1) forwards;
+    }
+
+    .card:hover {
+      border-color: var(--blue);
+      background: rgba(239,244,255,0.85);
+      transform: translateY(-4px) scale(1.02);
+      box-shadow: 0 12px 32px rgba(26,86,219,0.15);
+    }
+
+    .card-icon { font-size: 28px; margin-bottom: 10px; }
+
+    .card-label {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .card-sub {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    /* TYPE CARDS */
+    .card.type-cours  { border-color: #bfdbfe; }
+    .card.type-tds    { border-color: #fde68a; }
+    .card.type-tps    { border-color: #fed7aa; }
+    .card.type-exams  { border-color: #fecaca; }
+
+    .card.type-cours:hover  { background: #eff6ff; border-color: #1a56db; }
+    .card.type-tds:hover    { background: #fefce8; border-color: #eab308; }
+    .card.type-tps:hover    { background: #fff7ed; border-color: #f97316; }
+    .card.type-exams:hover  { background: #fef2f2; border-color: #dc2626; }
+
+    @keyframes dropIn {
+      0%   { opacity: 0; transform: translateY(40px) scale(0.95); }
+      60%  { opacity: 1; transform: translateY(-6px) scale(1.01); }
+      100% { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    /* FILE LIST */
+    .file-list { display: flex; flex-direction: column; gap: 8px; }
+
+    .file-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 16px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      cursor: pointer;
+      text-decoration: none;
+      color: var(--text);
+      opacity: 0;
+      transform: translateY(10px);
+      animation: dropIn 0.25s ease forwards;
+      transition: border-color 0.15s, background 0.15s;
+    }
+
+    .file-item:hover {
+      border-color: var(--blue);
+      background: var(--blue-light);
+    }
+
+    .file-title { font-size: 14px; font-weight: 600; margin-bottom: 3px; }
+    .file-meta  { font-size: 12px; color: var(--muted); }
+
+    .type-badge {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 99px;
+      letter-spacing: 0.5px;
+      margin-left: 12px;
+      flex-shrink: 0;
+    }
+
+    .badge-COURS { background: #1a56db; color: white; }
+    .badge-TDS   { background: #eab308; color: white; }
+    .badge-TPS   { background: #f97316; color: white; }
+    .badge-EXAMS { background: #dc2626; color: white; }
+
+    .no-files {
+      text-align: center;
+      padding: 40px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 60px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 24px;
+      font-size: 12px;
+      color: #d1d5db;
+      border-top: 1px solid var(--border);
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="index.html" class="logo">
+      <div class="logo-book">ق</div>
+      <div class="logo-text">rayti<span>.ma</span></div>
+    </a>
+    <div class="nav-links">
+      <a href="index.html">Accueil</a>
+      <a href="browse.html" class="active">Parcourir</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </nav>
+
+  <div class="breadcrumb" id="breadcrumb">
+    <span class="breadcrumb-item" onclick="goTo(0)">Accueil</span>
+    <span class="breadcrumb-sep">›</span>
+    <span class="breadcrumb-current">Semestres</span>
+  </div>
+
+  <div class="main">
+    <div class="level-title" id="levelTitle">Choisir un semestre</div>
+    <div id="content"><div class="loading">Chargement...</div></div>
+  </div>
+
+  <footer>Qrayti.ma · FSDM · USMBA Fès · 2025</footer>
+
+  <script>
+    const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQFHAdlDqti75ZJ4JiRFOywjFwZo7Gduwp1tdHKYHNEMGZSk56WTQCOx1eTViMSIxon04Kb97hAWouA/pub?gid=0&single=true&output=csv";
+
+    let allData = [];
+    let state = { semester: null, filiere: null, module: null, type: null };
+
+    // Normalize type
+    function normalizeType(raw) {
+      const t = raw.trim().toUpperCase();
+      if (["COURS","LESSON","LESSONS"].includes(t)) return "COURS";
+      if (["TDS","TD","EXERCISE","EXERCISES"].includes(t)) return "TDS";
+      if (["TPS","TP"].includes(t)) return "TPS";
+      if (["EXAMS","EXAM"].includes(t)) return "EXAMS";
+      return t;
+    }
+
+    function typeLabel(t) {
+      if (t === "COURS") return "Cours";
+      if (t === "TDS")   return "TDs";
+      if (t === "TPS")   return "TPs";
+      if (t === "EXAMS") return "Exams";
+      return t;
+    }
+
+    function typeIcon(t) {
+      if (t === "COURS") return "📘";
+      if (t === "TDS")   return "✏️";
+      if (t === "TPS")   return "🔬";
+      if (t === "EXAMS") return "📝";
+      return "📄";
+    }
+
+    // Load data
+    fetch(CSV_URL)
+      .then(r => r.text())
+      .then(csv => {
+        const lines = csv.trim().split("\n").slice(1);
+        allData = lines.map(line => {
+          const cols = line.split(",");
+          return {
+            department : (cols[0]||"").trim(),
+            filiere    : (cols[1]||"").trim(),
+            semester   : (cols[2]||"").trim(),
+            module     : (cols[3]||"").trim(),
+            professor  : (cols[4]||"").trim(),
+            type       : normalizeType(cols[5]||""),
+            title      : (cols[6]||"").trim(),
+            driveId    : (cols[7]||"").trim(),
+          };
+        }).filter(r => r.driveId);
+        renderSemesters();
+      })
+      .catch(() => {
+        document.getElementById('content').innerHTML = '<div class="no-files">❌ Erreur de chargement</div>';
+      });
+
+    function goTo(level) {
+      if (level === 0) { state = { semester:null, filiere:null, module:null, type:null }; renderSemesters(); }
+      if (level === 1) { state.filiere = null; state.module = null; state.type = null; renderFilieres(); }
+      if (level === 2) { state.module = null; state.type = null; renderModules(); }
+      if (level === 3) { state.type = null; renderTypes(); }
+    }
+
+    function updateBreadcrumb() {
+      const bc = document.getElementById('breadcrumb');
+      let html = `<span class="breadcrumb-item" onclick="goTo(0)">Accueil</span>`;
+
+      if (!state.semester) {
+        html += `<span class="breadcrumb-sep">›</span><span class="breadcrumb-current">Semestres</span>`;
+      } else if (!state.filiere) {
+        html += `<span class="breadcrumb-sep">›</span><span class="breadcrumb-item" onclick="goTo(0)">Semestres</span>`;
+        html += `<span class="breadcrumb-sep">›</span><span class="breadcrumb-current">${state.semester}</span>`;
+      } else if (!state.module) {
+        html += `<span class="breadcrumb-sep">›</span><span class="breadcrumb-item" onclick="goTo(0)">Semestres</span>`;
+        html += `<span class="breadcrumb-sep">›</span><span class="breadcrumb-item" onclick="goTo(1)">${state.semester}</span>`;
+        html += `<span class="breadcrumb-sep">›</span><span class="breadcrumb-current">${state.filiere}</span>`;
+      } else if (!state.type) {
+        html += `<span class="breadcrumb-sep">›</span><span class="breadcrumb-item" onclick="goTo(0)">Semestres</span>`;
+        html += `<span class="breadcrumb-sep">›</span><span class="breadcrumb-item" onclick="goTo(1)">${state.semester}</span>`;
+        html += `<span class="breadcrumb-sep">›</span><span class="breadcrumb-item" onclick="goTo(2)">${state.filiere}</span>`;
+        html += `<span class="breadcrumb-sep">›</span><span class="breadcrumb-current">${state.module}</span>`;
+      } else {
+        html += `<span class="breadcrumb-sep">›</span><span class="breadcrumb-item" onclick="goTo(0)">Semestres</span>`;
+        html += `<span class="breadcrumb-sep">›</span><span class="breadcrumb-item" onclick="goTo(1)">${state.semester}</span>`;
+        html += `<span class="breadcrumb-sep">›</span><span class="breadcrumb-item" onclick="goTo(2)">${state.filiere}</span>`;
+        html += `<span class="breadcrumb-sep">›</span><span class="breadcrumb-item" onclick="goTo(3)">${state.module}</span>`;
+        html += `<span class="breadcrumb-sep">›</span><span class="breadcrumb-current">${typeLabel(state.type)}</span>`;
+      }
+
+      bc.innerHTML = html;
+    }
+
+    function renderCards(items, onclick, iconFn, subFn, extraClass) {
+      const grid = document.createElement('div');
+      grid.className = 'cards-grid';
+      items.forEach((item, i) => {
+        const card = document.createElement('div');
+        card.className = 'card' + (extraClass ? ' ' + extraClass(item) : '');
+        card.style.animationDelay = (i * 80) + 'ms';
+        card.innerHTML = `
+          <div class="card-icon">${iconFn(item)}</div>
+          <div class="card-label">${item}</div>
+          ${subFn ? `<div class="card-sub">${subFn(item)}</div>` : ''}
+        `;
+        card.onclick = () => onclick(item);
+        grid.appendChild(card);
+      });
+      document.getElementById('content').innerHTML = '';
+      document.getElementById('content').appendChild(grid);
+    }
+
+    function renderSemesters() {
+      updateBreadcrumb();
+      document.getElementById('levelTitle').textContent = 'Choisir un semestre';
+      const semesters = [...new Set(allData.map(r => r.semester))].sort();
+      renderCards(
+        semesters,
+        s => { state.semester = s; renderFilieres(); },
+        s => '📅',
+        s => {
+          const count = allData.filter(r => r.semester === s).length;
+          return count + ' fichier' + (count > 1 ? 's' : '');
+        }
+      );
+    }
+
+    function renderFilieres() {
+      updateBreadcrumb();
+      document.getElementById('levelTitle').textContent = 'Choisir une filière';
+      const filieres = [...new Set(allData.filter(r => r.semester === state.semester).map(r => r.filiere))].sort();
+      renderCards(
+        filieres,
+        f => { state.filiere = f; renderModules(); },
+        f => '🎓',
+        f => {
+          const count = allData.filter(r => r.semester === state.semester && r.filiere === f).length;
+          return count + ' fichier' + (count > 1 ? 's' : '');
+        }
+      );
+    }
+
+    function renderModules() {
+      updateBreadcrumb();
+      document.getElementById('levelTitle').textContent = 'Choisir un module';
+      const modules = [...new Set(allData.filter(r => r.semester === state.semester && r.filiere === state.filiere).map(r => r.module))].sort();
+      renderCards(
+        modules,
+        m => { state.module = m; renderTypes(); },
+        m => '📖',
+        m => {
+          const count = allData.filter(r => r.semester === state.semester && r.filiere === state.filiere && r.module === m).length;
+          return count + ' fichier' + (count > 1 ? 's' : '');
+        }
+      );
+    }
+
+    function renderTypes() {
+      updateBreadcrumb();
+      document.getElementById('levelTitle').textContent = 'Choisir un type';
+      const types = [...new Set(allData.filter(r => r.semester === state.semester && r.filiere === state.filiere && r.module === state.module).map(r => r.type))];
+      renderCards(
+        types,
+        t => { state.type = t; renderFiles(); },
+        t => typeIcon(t),
+        t => {
+          const count = allData.filter(r => r.semester === state.semester && r.filiere === state.filiere && r.module === state.module && r.type === t).length;
+          return count + ' fichier' + (count > 1 ? 's' : '');
+        },
+        t => 'type-' + t.toLowerCase()
+      );
+    }
+
+    function renderFiles() {
+      updateBreadcrumb();
+      document.getElementById('levelTitle').textContent = 'Fichiers';
+      const files = allData.filter(r =>
+        r.semester === state.semester &&
+        r.filiere  === state.filiere  &&
+        r.module   === state.module   &&
+        r.type     === state.type
+      );
+
+      if (files.length === 0) {
+        document.getElementById('content').innerHTML = '<div class="no-files">😕 Aucun fichier trouvé</div>';
+        return;
+      }
+
+      const list = document.createElement('div');
+      list.className = 'file-list';
+
+      files.forEach((r, i) => {
+        const link = document.createElement('a');
+        link.className = 'file-item';
+        link.href = 'https://drive.google.com/file/d/' + r.driveId + '/preview';
+        link.target = '_blank';
+        link.style.animationDelay = (i * 60) + 'ms';
+        link.innerHTML = `
+          <div>
+            <div class="file-title">${r.title}</div>
+            <div class="file-meta">👤 ${r.professor}</div>
+          </div>
+          <span class="type-badge badge-${r.type}">${typeLabel(r.type)}</span>
+        `;
+        list.appendChild(link);
+      });
+
+      document.getElementById('content').innerHTML = '';
+      document.getElementById('content').appendChild(list);
+    }
+  </script>
+
+</body>
+</html>
