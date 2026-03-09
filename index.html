@@ -292,9 +292,10 @@
       letter-spacing: 0.5px;
     }
 
-    .type-LESSON   { background: #16a34a; color: white; }
-    .type-EXAM     { background: #dc2626; color: white; }
-    .type-EXERCISE { background: #d97706; color: white; }
+    .type-COURS { background: #1a56db; color: white; }
+    .type-TDS   { background: #eab308; color: white; }
+    .type-TPS   { background: #f97316; color: white; }
+    .type-EXAMS { background: #dc2626; color: white; }
 
     .result-arrow {
       color: var(--muted);
@@ -504,9 +505,9 @@
       });
 
       const fType = document.getElementById('fType');
-      types.forEach(t => {
+      [["COURS","Cours"],["TDS","TDs"],["TPS","TPs"],["EXAMS","Exams"]].forEach(([val, label]) => {
         const opt = document.createElement('option');
-        opt.value = t; opt.textContent = t;
+        opt.value = val; opt.textContent = label;
         fType.appendChild(opt);
       });
     }
@@ -550,7 +551,14 @@
           .some(v => v.toLowerCase().includes(query));
         const matchSemester = !semester || r.semester === semester;
         const matchFiliere  = !filiere  || r.filiere  === filiere;
-        const matchType     = !type     || r.type     === type;
+        const matchType = !type || (function() {
+          const raw = r.type.trim().toUpperCase();
+          if (type === "COURS") return ["COURS","LESSON","LESSONS"].includes(raw);
+          if (type === "TDS")   return ["TDS","TD","EXERCISE","EXERCISES"].includes(raw);
+          if (type === "TPS")   return ["TPS","TP"].includes(raw);
+          if (type === "EXAMS") return ["EXAMS","EXAM"].includes(raw);
+          return false;
+        })();
         return matchQuery && matchSemester && matchFiliere && matchType;
       });
 
@@ -563,7 +571,13 @@
 
       filtered.forEach(r => {
         const link = "https://drive.google.com/file/d/" + r.driveId + "/preview";
-        const typeClass = "type-" + r.type.trim().toUpperCase().replace(/\s/g, '');
+        const rawType = r.type.trim().toUpperCase();
+          let normalizedType = rawType;
+          if (["COURS", "LESSON", "LESSONS"].includes(rawType)) normalizedType = "COURS";
+          if (["TDS", "TD", "EXERCISE", "EXERCISES"].includes(rawType)) normalizedType = "TDS";
+          if (["TPS", "TP"].includes(rawType)) normalizedType = "TPS";
+          if (["EXAMS", "EXAM"].includes(rawType)) normalizedType = "EXAMS";
+          const typeClass = "type-" + normalizedType;
         html += `
           <a class="result-item" href="${link}" target="_blank">
             <div class="result-left">
@@ -574,7 +588,7 @@
                 <span>📅 ${r.semester} · ${r.filiere}</span>
               </div>
             </div>
-            <span class="type-badge ${typeClass}">${r.type.trim()}</span>
+            <span class="type-badge ${typeClass}">${normalizedType === "COURS" ? "Cours" : normalizedType === "TDS" ? "TDs" : normalizedType === "TPS" ? "TPs" : "Exams"}</span>
             <span class="result-arrow">→</span>
           </a>
         `;
